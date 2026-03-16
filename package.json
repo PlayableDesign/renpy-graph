@@ -1,0 +1,74 @@
+{
+  "name": "renpy-graph",
+  "displayName": "Ren'Py Dialogue Graph",
+  "description": "Visualize Ren'Py dialogue flow as an interactive node graph — see labels, jumps, calls, and menu branches at a glance.",
+  "version": "0.1.0",
+  "publisher": "playable-design",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "renpy",
+    "ren'py",
+    "visual novel",
+    "dialogue",
+    "graph"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/*.rpy"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "renpyGraph.showGraph",
+        "title": "Ren'Py: Show Dialogue Graph",
+        "icon": "$(type-hierarchy)"
+      },
+      {
+        "command": "renpyGraph.refresh",
+        "title": "Ren'Py: Refresh Dialogue Graph"
+      }
+    ],
+    "configuration": {
+      "title": "Ren'Py Dialogue Graph",
+      "properties": {
+        "renpyGraph.layout": {
+          "type": "string",
+          "default": "dagre",
+          "enum": ["dagre", "cose", "breadthfirst"],
+          "description": "Graph layout algorithm"
+        },
+        "renpyGraph.showOrphans": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show labels with no incoming or outgoing edges"
+        },
+        "renpyGraph.colorByFile": {
+          "type": "boolean",
+          "default": true,
+          "description": "Color nodes by their source .rpy file"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.3",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.56.0"
+  }
+}
