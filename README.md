@@ -4,12 +4,12 @@ VS Code extension that visualizes Ren'Py dialogue flow as an interactive node gr
 
 ## Features
 
-- **Automatic parsing** — scans all `.rpy` files in your workspace for `label`, `jump`, `call`, and `menu` statements
-- **Interactive graph** — pan, zoom, and click nodes to jump straight to that label in your editor
-- **Live updates** — graph refreshes automatically when you save a `.rpy` file
-- **Search/filter** — type in the search bar to highlight matching labels
-- **Hover details** — hover a node to see its file, line number, and first line of dialogue
-- **Color by file** — nodes are colored by their source `.rpy` file so you can see your project structure at a glance
+- **Automatic parsing:** scans all `.rpy` files in your workspace for `label`, `jump`, `call`, and `menu` statements
+- **Interactive graph:** pan, zoom, and click nodes to jump straight to that label in your editor
+- **Live updates:** graph refreshes automatically when you save a `.rpy` file
+- **Search/filter:** type in the search bar to highlight matching labels
+- **Hover details:** hover a node to see its file, line number, and first line of dialogue
+- **Color by file:** nodes are colored by their source `.rpy` file so you can see your project structure at a glance
 
 ## Usage
 

@@ -45,6 +45,9 @@ export interface DialogueGraph {
 // `label chapter1_intro:` or `label .sub_label:`
 const RE_LABEL = /^(\s*)label\s+([\w.]+)\s*(\(.*?\))?\s*:/;
 
+// `screen screen_name(...):`
+const RE_SCREEN = /^(\s*)screen\s+\w+/;
+
 // `jump chapter2` or `jump expression some_var`
 const RE_JUMP = /^(\s*)jump\s+([\w.]+)\s*$/;
 
@@ -76,6 +79,8 @@ export function parseFile(text: string, filePath: string): FileParseResult {
   let inMenu = false;
   let menuIndent = 0;
   let currentMenuChoice: string | null = null;
+  let inScreen = false;
+  let screenIndent = 0;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -87,6 +92,20 @@ export function parseFile(text: string, filePath: string): FileParseResult {
     }
 
     const indent = line.length - line.trimStart().length;
+
+    // ── Screen block tracking (label is a displayable inside screens) ──
+    const screenMatch = trimmed.match(RE_SCREEN);
+    if (screenMatch) {
+      inScreen = true;
+      screenIndent = indent;
+      continue;
+    }
+    if (inScreen && indent <= screenIndent) {
+      inScreen = false;
+    }
+    if (inScreen) {
+      continue;
+    }
 
     // ── Label definition ──
     const labelMatch = trimmed.match(RE_LABEL);
