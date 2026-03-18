@@ -2,7 +2,7 @@
   "name": "renpy-graph",
   "displayName": "Ren'Py Dialogue Graph",
   "description": "Visualize Ren'Py dialogue flow as an interactive node graph — see labels, jumps, calls, and menu branches at a glance.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "playable-design",
   "license": "MIT",
   "repository": {
@@ -57,6 +57,33 @@
           "type": "boolean",
           "default": true,
           "description": "Color nodes by their source .rpy file"
+        },
+        "renpyGraph.fontSize": {
+          "type": "number",
+          "default": 11,
+          "minimum": 6,
+          "maximum": 32,
+          "description": "Font size (in px) for node labels in the graph"
+        },
+        "renpyGraph.nodeFillColor": {
+          "type": "string",
+          "default": "#555555",
+          "description": "Node fill color (used when 'Color by File' is off)"
+        },
+        "renpyGraph.nodeOutlineColor": {
+          "type": "string",
+          "default": "#888888",
+          "description": "Node border/outline color"
+        },
+        "renpyGraph.jumpArrowColor": {
+          "type": "string",
+          "default": "#4fc1ff",
+          "description": "Color of jump edges"
+        },
+        "renpyGraph.choiceArrowColor": {
+          "type": "string",
+          "default": "#e5c07b",
+          "description": "Color of menu choice edges"
         }
       }
     }

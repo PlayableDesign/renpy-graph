@@ -67,6 +67,11 @@ export class GraphWebview {
         layout: config.get<string>('layout', 'dagre'),
         showOrphans: config.get<boolean>('showOrphans', true),
         colorByFile: config.get<boolean>('colorByFile', true),
+        fontSize: config.get<number>('fontSize', 11),
+        nodeFillColor: config.get<string>('nodeFillColor', '#555555'),
+        nodeOutlineColor: config.get<string>('nodeOutlineColor', '#888888'),
+        jumpArrowColor: config.get<string>('jumpArrowColor', '#4fc1ff'),
+        choiceArrowColor: config.get<string>('choiceArrowColor', '#e5c07b'),
       },
     });
   }
@@ -199,9 +204,9 @@ export class GraphWebview {
   <div class="toolbar">
     <input type="text" id="search" placeholder="Filter labels..." />
     <div class="legend">
-      <span class="legend-item"><span class="legend-swatch" style="background:#4fc1ff"></span>jump</span>
+      <span class="legend-item"><span class="legend-swatch" id="swatch-jump" style="background:#4fc1ff; border: 1px dashed #4fc1ff"></span>jump</span>
       <span class="legend-item"><span class="legend-swatch" style="background:#c678dd; border: 1px dashed #c678dd"></span>call</span>
-      <span class="legend-item"><span class="legend-swatch" style="background:#e5c07b"></span>menu</span>
+      <span class="legend-item"><span class="legend-swatch" id="swatch-choice" style="background:#e5c07b"></span>menu</span>
     </div>
     <div class="spacer"></div>
     <span class="stats" id="stats"></span>
@@ -227,7 +232,7 @@ export class GraphWebview {
     ];
     let fileColorMap = {};
 
-    // ── Edge colors ──
+    // ── Edge colors (updated from settings) ──
     const EDGE_COLORS = {
       jump: '#4fc1ff',
       call: '#c678dd',
@@ -298,6 +303,12 @@ export class GraphWebview {
           },
         },
         {
+          selector: 'edge[type="jump"]',
+          style: {
+            'line-style': 'dashed',
+          },
+        },
+        {
           selector: 'edge[type="call"]',
           style: {
             'line-style': 'dashed',
@@ -332,6 +343,9 @@ export class GraphWebview {
     let currentLayout = 'dagre';
     let showOrphans = true;
     let colorByFile = true;
+    let fontSize = 11;
+    let nodeFillColor = '#555555';
+    let nodeOutlineColor = '#888888';
     let currentGraphData = null;
 
     // ── Message handler ──
@@ -341,6 +355,23 @@ export class GraphWebview {
         currentLayout = msg.settings.layout;
         showOrphans = msg.settings.showOrphans;
         colorByFile = msg.settings.colorByFile;
+        fontSize = msg.settings.fontSize ?? 11;
+        nodeFillColor = msg.settings.nodeFillColor ?? '#555555';
+        nodeOutlineColor = msg.settings.nodeOutlineColor ?? '#888888';
+        EDGE_COLORS.jump = msg.settings.jumpArrowColor ?? '#4fc1ff';
+        EDGE_COLORS.menu = msg.settings.choiceArrowColor ?? '#e5c07b';
+
+        cy.style().selector('node').style('font-size', fontSize + 'px').update();
+        cy.style().selector('edge[type="menu"]').style('font-size', Math.max(6, fontSize - 2) + 'px').update();
+
+        // Update legend swatches
+        const jumpColor = EDGE_COLORS.jump;
+        const choiceColor = EDGE_COLORS.menu;
+        const swatchJump = document.getElementById('swatch-jump');
+        const swatchChoice = document.getElementById('swatch-choice');
+        if (swatchJump) { swatchJump.style.background = jumpColor; swatchJump.style.borderColor = jumpColor; }
+        if (swatchChoice) { swatchChoice.style.background = choiceColor; }
+
         currentGraphData = msg;
         rebuildGraph(msg);
       }
@@ -372,7 +403,7 @@ export class GraphWebview {
 
         // Extract filename without extension for color mapping
         const fname = n.file.replace(/.*[\\/]/, '').replace(/\\.rpy$/, '');
-        const nodeColor = colorByFile ? (fileColorMap[fname] || '#666') : '#555';
+        const nodeColor = colorByFile ? (fileColorMap[fname] || nodeFillColor) : nodeFillColor;
 
         const classes = [];
         if (n.id === 'start' || n.id === 'main_menu' || n.id === 'splashscreen') {
@@ -388,7 +419,7 @@ export class GraphWebview {
             line: n.line,
             comment: n.comment || '',
             color: nodeColor,
-            borderColor: nodeColor,
+            borderColor: nodeOutlineColor,
           },
           classes: classes.join(' '),
         });
