@@ -24,6 +24,11 @@ VS Code extension that visualizes Ren'Py dialogue flow as an interactive node gr
 | `renpyGraph.layout` | `dagre` | Layout algorithm: `dagre`, `cose`, or `breadthfirst` |
 | `renpyGraph.showOrphans` | `true` | Show labels with no connections |
 | `renpyGraph.colorByFile` | `true` | Color nodes by their source file |
+| `renpyGraph.fontSize` | `11` | Font size (px) for node labels |
+| `renpyGraph.nodeFillColor` | `#555555` | Node fill color (used when Color by File is off) |
+| `renpyGraph.nodeOutlineColor` | `#888888` | Node border/outline color |
+| `renpyGraph.jumpArrowColor` | `#4fc1ff` | Color of jump edges |
+| `renpyGraph.choiceArrowColor` | `#e5c07b` | Color of menu choice edges |
 
 ## Development
 
